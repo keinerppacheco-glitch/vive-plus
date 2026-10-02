@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cobrador: mis cuentas</title>
+<style>
+:root{--bg:#f2f5f7;--card:#fff;--tx:#17262d;--mut:#5b6b73;--bd:#d3dce1;--ac:#0b5c6b;--acx:#fff;--acbg:#dcedf0;--er:#b3261e;--sg:#f8fafb;--wn:#8a5a00;--wnbg:#fdefd0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121b1f;--card:#1b282e;--tx:#e8eff2;--mut:#9fb1b9;--bd:#33454d;--ac:#6cc5d4;--acx:#0d1a1e;--acbg:#173a42;--er:#f2a09b;--sg:#162227;--wn:#f3cf85;--wnbg:#3d2f10}}
+:root[data-theme="dark"]{--bg:#121b1f;--card:#1b282e;--tx:#e8eff2;--mut:#9fb1b9;--bd:#33454d;--ac:#6cc5d4;--acx:#0d1a1e;--acbg:#173a42;--er:#f2a09b;--sg:#162227;--wn:#f3cf85;--wnbg:#3d2f10}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 40px}
+h1{font-size:22px;margin:4px 0 2px;font-weight:600}
+h2{font-size:16px;margin:0 0 10px;font-weight:600;color:var(--ac)}
+.sub{color:var(--mut);margin:0 0 14px;font-size:14px}
+.chips{display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;margin-bottom:12px}
+.chip{flex:0 0 auto;text-align:left;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer;width:100%;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.chip[aria-pressed="true"]{border:2px solid var(--ac);padding:7px 11px}
+.chip b{display:block;font-weight:600}
+.chip span{color:var(--mut);font-size:13px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+.big{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.big div small{display:block;color:var(--mut);font-size:13px}
+.big strong{font-size:28px;font-weight:600;line-height:1.1}
+.badge{font-size:12px;border-radius:10px;padding:2px 10px;background:var(--acbg);color:var(--ac)}
+.badge.w{background:var(--wnbg);color:var(--wn)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin:12px 0 0;font-size:15px}
+dt{color:var(--mut)}dd{margin:0;text-align:right}
+.house{background:var(--sg);border:1px dashed var(--bd);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:15px}
+.house small{display:block;color:var(--mut);font-size:12px;margin-bottom:2px}
+.house img{width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-top:8px;display:block}
+.acts{display:flex;gap:8px;margin-top:12px}
+.acts a{flex:1;text-align:center;text-decoration:none;color:var(--ac);border:1px solid var(--ac);border-radius:8px;padding:8px;font-size:14px}
+label{display:block;font-size:14px;margin:0 0 4px;color:var(--mut)}
+.f{margin-bottom:12px}
+select,input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+input[readonly]{background:var(--sg);font-weight:600}
+input:focus,button:focus-visible,.chip:focus-visible,a:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:400px){.row{grid-template-columns:1fr}}
+.err{display:block;color:var(--er);font-size:13px;margin-top:3px}
+.bad{border-color:var(--er)}
+#sig{width:100%;height:150px;border:1px dashed var(--mut);border-radius:8px;background:var(--sg);touch-action:none;display:block}
+button.main{width:100%;padding:14px;font:inherit;font-weight:600;border:0;border-radius:10px;background:var(--ac);color:var(--acx);cursor:pointer}
+button.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer;margin-top:8px}
+.msg{background:var(--acbg);color:var(--tx);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:15px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:440px}
+th,td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{color:var(--mut);font-weight:500;font-size:13px}
+td.n,th.n{text-align:right}
+td img{height:28px;width:64px;object-fit:contain;background:var(--sg);border-radius:4px;display:block}
+.hide{display:none}
+.done{text-align:center;padding:6px 0 2px;font-weight:600;color:var(--ac)}
+</style>
+</head>
+<body>
+<main>
+<h1>Mis cuentas</h1>
+<label for="perfil" style="margin:0 0 4px">Perfil de cobrador</label><select id="perfil" style="margin-bottom:8px"></select><p class="sub" id="zn"></p><div id="alr"></div><div id="jor"></div>
+<h2>Cobros pendientes · el más próximo primero</h2>
+<input id="q" placeholder="Buscar cliente o factura…" style="margin-bottom:8px" aria-label="Buscar cuenta"><div class="chips" id="chips"></div>
+<div class="msg hide" id="msg" role="status"></div>
+<div id="detail"></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>"$"+Number(n||0).toLocaleString("es-CO");
+const iso=d=>d.toISOString().slice(0,10);
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const addDays=(d,n)=>{const x=new Date(d+"T12:00:00");x.setDate(x.getDate()+n);return x};
+const rel=n=>iso(addDays(today(),n));
+const fs=d=>new Date(d+"T12:00:00").toLocaleDateString("es-CO",{day:"numeric",month:"short"});
+const fl=d=>new Date(d+"T12:00:00").toLocaleDateString("es-CO",{weekday:"long",day:"numeric",month:"long"});
+let ACC=[];
+let cur=0,hasSig=false,drawing=false,cv,cx,CF="";
+function reducir(file,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7))};im.src=r.result};r.readAsDataURL(file)}
+const saldo=a=>a.h.length?a.h[a.h.length-1].s:a.total;
+const prox=a=>a.h.length?a.h[a.h.length-1].p:a.first;
+
+function chips(){
+  $("chips").innerHTML="";
+  ACC.forEach((a,i)=>{if(($("q").value||"").trim()&&!(a.n+" "+a.inv).toLowerCase().includes($("q").value.trim().toLowerCase()))return;
+    const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",i===cur);
+    const s=saldo(a),p=prox(a);
+    b.innerHTML=`<b>${a.n}</b><span>${s?fmt(s)+" · "+(p<today()?"atrasada desde "+fs(p):p===today()?"visita hoy":fs(p)):"Saldada"}</span>`;
+    b.onclick=()=>{cur=i;$("msg").classList.add("hide");render()};
+    $("chips").appendChild(b);
+  });
+}
+function render(){const pe=ACC.filter(x=>x.entrega==="pendiente"||x.entrega==="recogido");$("alr").innerHTML=pe.length?`<div class="msg" role="alert"><b>Alerta de entrega:</b> ${pe.map(x=>x.n+" ("+x.inv+") — "+(x.entrega==="pendiente"?"recoger en la oficina":"entregar al cliente")).join(" · ")}</div>`:"";
+  chips();
+  if(!ACC.length){$("detail").innerHTML='<div class="card"><div class="sub" style="margin:0">Aún no tienes cuentas asignadas. Cuando el vendedor registre una venta, aparecerá aquí.</div></div>';return}
+  const a=ACC[cur],s=saldo(a),p=prox(a),pag=a.total-s,late=s>0&&p<today();
+  let h=`<div class="card"><div class="big"><div><small>Saldo pendiente · ${a.inv}</small><strong>${fmt(s)}</strong></div>
+  ${s?`<span class="badge ${late?"w":""}">${late?"Atrasada desde el "+fs(p):"Vuelve el "+fs(p)}</span>`:`<span class="badge">Saldada</span>`}</div>
+  <dl><dt>Cliente</dt><dd>${a.n}</dd><dt>Teléfono</dt><dd>${a.tel}</dd>${a.ref?`<dt>Referencia</dt><dd>${a.ref}</dd>`:""}
+  <dt>Dirección</dt><dd>${a.dir}, ${a.c}</dd><dt>Producto</dt><dd>${a.prod}</dd><dt>Valor total</dt><dd>${fmt(a.total)}</dd>
+  <dt>Pagado</dt><dd>${fmt(pag)}</dd><dt>Forma de pago</dt><dd>${a.dias===7?"Semanal":"Quincenal"} de ${fmt(a.cuota)}</dd></dl>
+  <div class="house"><small>Descripción de la casa</small>${a.obs}${a.foto?`<img src="${a.foto}" alt="Foto de la casa">`:""}</div>
+  ${a.entrega==="pendiente"||a.entrega==="recogido"?`<div class="house"><small>Entrega de producto</small>${a.entrega==="pendiente"?"Recoge el producto en la oficina y confírmalo.":"Ya lo tienes. Entrégalo al cliente y confírmalo."}${a.entregaT?"":""}<br><button type="button" class="ghost" id="${a.entrega==="pendiente"?"ent1":"ent2"}">${a.entrega==="pendiente"?"Recibí el producto en la oficina":"Entregué el producto al cliente"}</button></div>`:""}<div class="acts"><a href="tel:${a.tel}">Llamar</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.dir+", "+a.c+", Colombia")}" target="_blank" rel="noopener">Ver en mapa</a></div></div>`;
+  if(s>0){
+    h+=`<div class="card"><h2>Registrar cobro</h2>
+    <div class="row"><div class="f"><label for="cF">Fecha</label><input id="cF" type="date"></div>
+    <div class="f"><label for="cA">Abono</label><input id="cA" type="number" inputmode="numeric" min="0"><span class="err" id="e_cA"></span></div></div>
+    <div class="row"><div class="f"><label for="cS">Saldo después del abono</label><input id="cS" readonly></div>
+    <div class="f"><label for="cP">Vuelve a pasar</label><input id="cP" type="date"></div></div>
+    <div class="f"><label for="cM">Método de pago</label><select id="cM"><option value="efectivo">Efectivo</option><option value="nequi">Nequi</option></select></div>
+    <div id="nq" class="hide"><div class="row"><div class="f"><label for="cN">N.º de comprobante</label><input id="cN" inputmode="numeric" autocomplete="off"><span class="err" id="e_cN"></span></div>
+    <div class="f"><label for="cFt">Foto del comprobante</label><input id="cFt" type="file" accept="image/*" capture="environment"><span class="err" id="e_cFt"></span></div></div></div>
+    <div class="f"><label>Firma del cliente</label><canvas id="sig"></canvas><span class="err" id="e_sig"></span><button type="button" class="ghost" id="clr">Borrar firma</button></div>
+    <button type="button" class="main" id="go">Guardar cobro</button></div>`;
+  }else h+=`<div class="card"><div class="done">Esta cuenta ya está pagada por completo</div></div>`;
+  h+=`<div class="card"><h2>Historial de cobros</h2>${a.h.length?`<div class="tw"><table><thead><tr><th>Fecha y hora</th><th class="n">Abono</th><th class="n">Saldo</th><th>Vuelve</th><th>Firma</th></tr></thead><tbody>${a.h.map(r=>`<tr><td>${fs(r.f)}${r.t?" · "+hh(r.t):""}</td><td class="n">${fmt(r.m)}${r.metodo==="nequi"?" · Nequi":""}</td><td class="n">${fmt(r.s)}</td><td>${r.s?fs(r.p):"—"}</td><td>${r.sig?`<img src="${r.sig}" alt="Firma del cliente">`:"—"}</td></tr>`).join("")}</tbody></table></div>`:`<div class="sub" style="margin:0">Aún no hay cobros registrados.</div>`}</div>`;
+  $("detail").innerHTML=h+semana();["ent1","ent2"].forEach(id=>{const b=$(id);if(b)b.onclick=async()=>{const r=await fetch("/api/entregas",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({inv:a.inv,paso:id==="ent1"?"recoger":"entregar"})});if(!r.ok)alert((await r.json()).error)}});
+  if(s>0)setup(a);
+}
+function setup(a){
+  const s=saldo(a);
+  $("cF").value=today();$("cA").value=Math.min(a.cuota,s);
+  const upd=()=>{const v=+$("cA").value||0;$("cS").value=fmt(Math.max(s-v,0));$("cP").value=(s-v>0&&$("cF").value)?iso(addDays($("cF").value,a.dias)):"";};
+  $("cA").oninput=upd;$("cF").oninput=upd;upd();
+  CF="";$("cM").onchange=()=>$("nq").classList.toggle("hide",$("cM").value!=="nequi");
+  $("cFt").onchange=e=>{const f=e.target.files[0];if(!f){CF="";return}reducir(f,d=>{CF=d;$("e_cFt").textContent=""})};
+  cv=$("sig");cx=cv.getContext("2d");sizeSig();
+  cv.onpointerdown=e=>{drawing=true;cv.setPointerCapture(e.pointerId);const[x,y]=pos(e);cx.beginPath();cx.moveTo(x,y)};
+  cv.onpointermove=e=>{if(!drawing)return;const[x,y]=pos(e);cx.lineTo(x,y);cx.stroke();hasSig=true;$("e_sig").textContent=""};
+  cv.onpointerup=cv.onpointercancel=()=>drawing=false;
+  $("clr").onclick=sizeSig;
+  $("go").onclick=()=>save(a);
+}
+function sizeSig(){const r=cv.getBoundingClientRect();cv.width=r.width;cv.height=r.height;cx.lineWidth=2.2;cx.lineCap="round";cx.strokeStyle=getComputedStyle(document.body).color;hasSig=false}
+function pos(e){const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+async function save(a){
+  const s=saldo(a),m=+$("cA").value;let bad=0;
+  $("e_cA").textContent="";$("cA").classList.remove("bad");$("e_sig").textContent="";
+  if(!(m>0&&m<=s)){$("cA").classList.add("bad");$("e_cA").textContent="El abono debe ser mayor a 0 y no superar el saldo ("+fmt(s)+").";bad=1}
+  if(!hasSig){$("e_sig").textContent="Falta la firma del cliente.";bad=1}
+  const nq=$("cM").value==="nequi";$("cN").classList.remove("bad");$("e_cN").textContent="";$("e_cFt").textContent="";
+  if(nq&&$("cN").value.trim().length<4){$("cN").classList.add("bad");$("e_cN").textContent="Escribe el número del comprobante.";bad=1}
+  if(nq&&!CF){$("e_cFt").textContent="Sube la foto del comprobante.";bad=1}
+  if(bad){(document.querySelector(".bad")||cv).scrollIntoView({behavior:"smooth",block:"center"});return}
+  const ns=s-m;
+  a.h.push({f:$("cF").value,m:m,s:ns,p:ns?$("cP").value||iso(addDays($("cF").value,a.dias)):"",sig:cv.toDataURL("image/png"),metodo:$("cM").value,comp:nq?$("cN").value.trim():""});
+  try{const r=await fetch("/api/cobros",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({inv:a.inv,cobro:a.h[a.h.length-1],foto:nq?CF:""})});if(!r.ok){const j=await r.json().catch(()=>({}));throw {msg:j.error||""}}}
+  catch(e){a.h.pop();(nq&&e.msg?$("e_cN"):$("e_sig")).textContent=e.msg||"No se pudo guardar el cobro. Revisa la conexión e intenta de nuevo.";return}
+  const t=$("msg");
+  t.textContent=ns?`Cobro guardado. Quedan ${fmt(ns)} y vuelves el ${fl(a.h[a.h.length-1].p)}.`:"Cobro guardado. La cuenta quedó saldada.";
+  t.classList.remove("hide");render();window.scrollTo({top:0,behavior:"smooth"});
+}
+let ME="";const hh=t=>new Date(t).toLocaleTimeString("es-CO",{hour:"numeric",minute:"2-digit"});
+function semana(){const d=new Date(today()+"T12:00:00");d.setDate(d.getDate()-(d.getDay()+1)%7);const days=[...Array(7)].map((_,i)=>{const x=new Date(d);x.setDate(x.getDate()+i);return x.toISOString().slice(0,10)});let ac=0;const rows=days.map(f=>{let e=0,n=0;ACC.forEach(a=>a.h.forEach(r=>{if(r.f===f&&!r.ini){if(r.metodo==="nequi")n+=r.m;else e+=r.m}}));ac+=e+n;return`<tr><td>${fs(f)}</td><td class="n">${fmt(e)}</td><td class="n">${fmt(n)}</td><td class="n">${fmt(ac)}</td></tr>`}),prog=ACC.filter(a=>saldo(a)>0&&prox(a)<=days[6]).length,pc=ac>=5700000?23:ac>=3700000?22:ac>=3100000?21:ac>=2600000?19:ac>=2000000?17:0;return`<div class="card"><h2>Mi semana · sábado a viernes</h2><div class="sub" style="margin:0 0 8px">Cobros programados: ${prog} · Recaudado: ${fmt(ac)} · Porcentaje a pagar: ${pc} % (${fmt(Math.round(ac*pc/100))})</div><div class="tw"><table><thead><tr><th>Fecha</th><th class="n">Efectivo</th><th class="n">Nequi</th><th class="n">Acumulado</th></tr></thead><tbody>${rows.join("")}</tbody></table></div></div>`}
+async function jor(){if(!ME)return;try{const j=await(await fetch("/api/jornada?cob="+encodeURIComponent(ME)+"&fecha="+today())).json(),z=await(await fetch("/api/zonas")).json(),zn=Object.keys(z).filter(k=>z[k].includes(ME));
+$("zn").textContent="Cobrador: "+ME+" · "+(zn.length?"Zona "+zn.join(", "):"Sin zona asignada");
+$("jor").innerHTML=`<div class="card"><h2>Mi día de cobro · ${fl(today())}</h2>${j.ini?`<div class="sub" style="margin:0 0 8px">Inicio: ${hh(j.ini)}${j.fin?" · Fin: "+hh(j.fin):""}</div>`:""}${j.fin?`<div class="done">Día finalizado</div>`:`<div class="acts"><button type="button" class="ghost" id="jI" ${j.ini||j.bi?"disabled":""}>${j.bi&&!j.ini?"Inicio bloqueado":"Iniciar día"}</button><button type="button" class="ghost" id="jF" ${!j.ini||j.bf?"disabled":""}>${j.bf?"Cierre bloqueado":"Finalizar día"}</button></div>`}</div>`;
+["jI","jF"].forEach(id=>{const b=$(id);if(b)b.onclick=async()=>{const r=await fetch("/api/jornada",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cob:ME,fecha:today(),accion:id==="jI"?"ini":"fin"})});if(!r.ok)alert((await r.json()).error);jor()}})}catch(e){}}
+async function load(vivo){jor();
+  const antes=ACC.length,iv=ACC[cur]&&ACC[cur].inv;
+  try{ACC=await(await fetch("/api/cuentas?cob="+encodeURIComponent(ME))).json()}catch(e){return}
+  ACC.sort((x,y)=>(!saldo(x)-!saldo(y))||(prox(x)<prox(y)?-1:prox(x)>prox(y)?1:0));const k=ACC.findIndex(x=>x.inv===iv);cur=k>=0?k:0;
+  const f=document.activeElement&&document.activeElement.id;
+  if(vivo&&(hasSig||CF||["cA","cF","cP","cN","cM","cFt"].includes(f)))chips();else render();
+  if(vivo&&ACC.length>antes){const t=$("msg");t.textContent="Nueva cuenta recibida: "+(q=>q.n+" ("+q.inv+").")(ACC.reduce((m,x)=>x.inv>m.inv?x:m));t.classList.remove("hide")}
+}
+$("q").oninput=chips;
+(async()=>{let l=[];try{l=await(await fetch("/api/cobradores")).json()}catch(e){}const g=localStorage.getItem("cob");ME=l.includes(g)?g:(l[0]||"");$("perfil").innerHTML=l.map(n=>`<option${n===ME?" selected":""}>${n}</option>`).join("");$("perfil").onchange=()=>{ME=$("perfil").value;localStorage.setItem("cob",ME);cur=0;load(false)};load(false)})();
+new EventSource("/api/eventos").onmessage=()=>load(true);
+</script>
+</body>
+</html>

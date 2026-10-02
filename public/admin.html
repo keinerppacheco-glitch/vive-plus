@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Administrador</title>
+<style>
+:root{--bg:#f2f5f7;--card:#fff;--tx:#17262d;--mut:#5b6b73;--bd:#d3dce1;--ac:#0b5c6b;--acx:#fff;--acbg:#dcedf0;--sg:#f8fafb;--wn:#8a5a00;--wnbg:#fdefd0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121b1f;--card:#1b282e;--tx:#e8eff2;--mut:#9fb1b9;--bd:#33454d;--ac:#6cc5d4;--acx:#0d1a1e;--acbg:#173a42;--sg:#162227;--wn:#f3cf85;--wnbg:#3d2f10}}
+:root[data-theme="dark"]{--bg:#121b1f;--card:#1b282e;--tx:#e8eff2;--mut:#9fb1b9;--bd:#33454d;--ac:#6cc5d4;--acx:#0d1a1e;--acbg:#173a42;--sg:#162227;--wn:#f3cf85;--wnbg:#3d2f10}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:16px 14px 40px}
+h1{font-size:22px;margin:4px 0 2px;font-weight:600}h2{font-size:16px;margin:0;font-weight:600;color:var(--ac)}
+.sub{color:var(--mut);margin:0 0 14px;font-size:14px}
+.app{display:flex;min-height:100vh}
+.side{width:230px;flex:0 0 230px;background:var(--card);border-right:1px solid var(--bd);padding:16px 12px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.side h1{margin:0}.side .sub{margin:0 0 8px}
+.app main{flex:1;min-width:0;max-width:none;margin:0;padding:16px 20px 40px}
+.tabs{display:flex;flex-direction:column;gap:4px;margin:0 0 12px}
+.tabs .chip{width:100%;text-align:left;border-color:transparent;background:none}
+.tabs .chip[aria-pressed="true"]{background:var(--acbg);border:1px solid var(--ac);padding:8px 16px}
+.gt{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);margin:12px 6px 2px}
+#ttl{font-size:22px;margin:0 0 12px;color:var(--tx)}
+.menu{display:none}
+@media(max-width:800px){.app{display:block}.side{position:fixed;top:0;bottom:0;left:0;height:auto;z-index:20;width:260px;transform:translateX(-100%);transition:transform .2s;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}body.open .side{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}.menu{display:inline-block;margin-bottom:10px}.app main{padding:12px 12px 40px}}
+.chip{flex:0 0 auto;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:8px 16px;font:inherit;font-size:15px;cursor:pointer}
+.chip[aria-pressed="true"]{border:2px solid var(--ac);padding:7px 15px;font-weight:600}
+button:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+.k{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}
+.k small{display:block;color:var(--mut);font-size:13px}.k strong{font-size:22px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+.card .kp{margin-top:10px}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+select{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{color:var(--mut);font-weight:500;font-size:13px}td.n,th.n{text-align:right}
+.badge{font-size:12px;border-radius:10px;padding:2px 10px;background:var(--acbg);color:var(--ac)}.badge.w{background:var(--wnbg);color:var(--wn)}
+label{display:block;font-size:13px;color:var(--mut)}
+input{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;align-items:end}
+.vcard{display:block;width:100%;text-align:left;font:inherit;color:var(--tx);cursor:pointer}
+.fr input,.fr select,input[type=date]{width:100%;font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+.mi{width:80px;font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--tx)}
+button.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+@media print{.side,.menu,button,.fr,.sub{display:none!important}.app{display:block}}
+</style></head><body><div class="app"><aside class="side"><h1>Administrador</h1><p class="sub" id="sub">Conectando…</p><nav class="tabs" id="tabs"></nav><button class="ghost" id="rst">Borrar datos de la demo</button></aside><main><button class="ghost menu" id="mn" aria-label="Abrir menú">☰ Menú</button><h2 id="ttl"></h2><div id="v"></div></main></div>
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>"$"+Number(n||0).toLocaleString("es-CO");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fd=d=>d?new Date(d+"T12:00:00").toLocaleDateString("es-CO",{day:"numeric",month:"short",year:"numeric"}):"—";
+const ft=t=>new Date(t).toLocaleString("es-CO",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
+let PR=[],JR=[],VL=[],FA=[],ZN={},BQ={},sem="",pct=22,fm="",AS=[],dSal="",sV="",sP="",ALL=[],EL=[],INVT=[],vsel="",C=[],M=[],N=[],ed=null,tab="main",flt="todos";
+const TABS=[["main","Principal"],["ventas","Ventas"],["vend","Vendedores"],["cob","Cobradores"],["nequi","Nequi"],["inv","Inventario"],["salida","Salida del día"],["semanal","Cobro semanal"],["prest","Préstamos"],["zonas","Zonas y jornada"],["rend","Rendimiento"],["dev","Devoluciones"],["cli","Mudanzas"],["mora","Mora"],["caja","Caja"]];
+const sum=(l,f)=>l.reduce((s,a)=>s+f(a),0);
+const saldo=a=>a.h.length?a.h[a.h.length-1].s:a.total;
+const cobrado=a=>sum(a.h.filter(r=>!r.ini),r=>r.m);
+const cont=a=>a.tipo==="contado";
+const td=(v,n)=>`<td${n?' class="n"':""}>${v}</td>`;
+const kpi=(l,v)=>`<div class="k"><small>${l}</small><strong>${v}</strong></div>`;
+const tbl=(h,rows)=>rows.length?`<div class="tw"><table><thead><tr>${h.map(x=>`<th${x[1]?' class="n"':""}>${x[0]}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`:`<div class="sub" style="margin:0">Sin registros todavía.</div>`;
+const vacio=`<div class="card"><div class="sub" style="margin:0">Aún no hay ventas. Registra una en el formulario del vendedor y aparecerá aquí.</div></div>`;
+const tipoB=a=>cont(a)?`<span class="badge">Contado</span>`:`<span class="badge w">Crédito</span>`;
+const by=(l,k)=>{const o={};l.forEach(a=>{const n=a[k]||"Sin asignar";(o[n]=o[n]||[]).push(a)});return o};
+
+function vMain(){
+  const cr=C.filter(a=>!cont(a));
+  const m=M.filter(x=>(flt==="todos"||x.rol===flt)&&(!fm||new Date(x.t-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10)===fm)).slice().reverse();
+  const T={venta:"Venta a crédito",contado:"Venta de contado",cobro:"Cobro",eliminada:"Venta eliminada",editada:"Venta editada",inventario:"Inventario",jornada:"Jornada",entrega:"Entrega",mudanza:"Mudanza"};
+  return `<div class="kp">${kpi("Vendido en total",fmt(sum(C,a=>a.total)))}${kpi("Ventas de contado",fmt(sum(C.filter(cont),a=>a.total)))}${kpi("Recaudado por cobradores",fmt(sum(cr,cobrado)))}${kpi("Saldo por cobrar",fmt(sum(cr,saldo)))}</div>
+  <div class="card"><div class="hd"><h2>Historial de movimientos</h2><select id="flt" aria-label="Filtrar movimientos"><option value="todos">Todos</option><option value="vendedor">Solo vendedores</option><option value="cobrador">Solo cobradores</option><option value="inventario">Solo inventario</option></select><input type="date" id="fm" value="${fm}" aria-label="Ver movimientos de una fecha" style="width:auto"><button class="ghost" id="fmx">Todas las fechas</button></div>
+  ${tbl([["Fecha y hora"],["Quién"],["Rol"],["Movimiento"],["Factura"],["Cliente"],["Monto",1],["Detalle"]],m.map(x=>`<tr>${td(ft(x.t))}${td(esc(x.quien))}${td({vendedor:"Vendedor",cobrador:"Cobrador",administrador:"Administrador",inventario:"Inventario"}[x.rol]||x.rol)}${td(T[x.tipo]||x.tipo)}${td(esc(x.inv))}${td(esc(x.cliente))}${td(["inventario","jornada","entrega","mudanza"].includes(x.tipo)?"—":fmt(x.monto),1)}${td(esc(x.det))}</tr>`))}</div>`;
+}
+const H={"Content-Type":"application/json"};
+const hh=t=>new Date(t).toLocaleTimeString("es-CO",{hour:"numeric",minute:"2-digit"});
+const hoy=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const prox=a=>a.h.length?a.h[a.h.length-1].p:a.first;
+const fv=a=>a.fecha||(a.h[0]&&a.h[0].f)||"";
+function wk(){const d=new Date(hoy()+"T12:00:00");d.setDate(d.getDate()-(d.getDay()+1)%7);return d.toISOString().slice(0,10)}
+const delB=a=>`<button class="ghost" data-ed="${esc(a.inv)}">Editar</button> <button class="ghost" data-del="${esc(a.inv)}">Eliminar</button>`;
+function vVentas(){
+  const e=C.find(a=>a.inv===ed),form=e?`<div class="card"><h2>Editar ${esc(e.inv)} · ${esc(e.n)}</h2><div class="fr">${(e.items||[e.prod]).length>1?`<div><label>Productos de la venta</label><div class="sub" style="margin:0">${esc(e.prod)}</div></div>`:`<div><label for="eP">Producto</label><select id="eP">${INVT.map(p=>`<option${p.nombre===e.prod?" selected":""}>${esc(p.nombre)}</option>`).join("")}${INVT.some(p=>p.nombre===e.prod)?"":`<option selected>${esc(e.prod)}</option>`}</select></div>`}<div><label for="eT">Valor total</label><input id="eT" type="number" value="${e.total}"></div>${cont(e)?"":`<div><label for="eQ">Valor a cobrar</label><input id="eQ" type="number" value="${e.cuota}"></div><div><label for="eC">Cobrador</label><select id="eC">${COBS.map(c=>`<option${c===e.cob?" selected":""}>${c}</option>`).join("")}</select></div>`}</div><div style="margin-top:10px"><button class="ghost" id="eOk">Guardar cambios</button> <button class="ghost" id="eNo">Cancelar</button></div></div>`:"";
+  const el=EL.length?`<div class="card"><h2>Ventas eliminadas</h2>${tbl([["Factura"],["Cliente"],["Producto"],["Vendedor"],["Total",1],["Eliminada"]],EL.map(a=>`<tr>${td(esc(a.inv))}${td(esc(a.n))}${td(esc(a.prod))}${td(esc(a.vend||"—"))}${td(fmt(a.total),1)}${td(ft(a.anuladaT))}</tr>`))}</div>`:"";
+  if(!C.length)return form+vacio+el;
+  return form+`<div class="card"><h2>Todas las ventas</h2>${tbl([["Factura"],["Fecha"],["Cliente"],["Producto"],["Tipo"],["Vendedor"],["Cobrador"],["Total",1],["Pagado",1],["Saldo",1],["Acción"]],C.slice().reverse().map(a=>`<tr>${td(esc(a.inv))}${td(fd(fv(a)))}${td(esc(a.n))}${td(esc(a.prod))}${td(tipoB(a))}${td(esc(a.vend||"—"))}${td(esc(a.cob||"—"))}${td(fmt(a.total),1)}${td(fmt(a.total-saldo(a)),1)}${td(fmt(saldo(a)),1)}${td(delB(a))}</tr>`))}</div>`+el;
+}
+function vVend(){
+  if(!C.length)return vacio;
+  const g=by(C,"vend");
+  if(vsel&&g[vsel])return perfil(vsel,g[vsel]);
+  vsel="";
+  return `<div class="sub">Toca un vendedor para ver su perfil y el detalle de sus ventas.</div>`+Object.keys(g).map(n=>{const l=g[n];return `<button class="card vcard" data-v="${esc(n)}"><h2>${esc(n)}</h2><div class="kp">${kpi("Ventas",l.length)}${kpi("Total vendido",fmt(sum(l,a=>a.total)))}${kpi("Le deben",fmt(sum(l,saldo)))}</div></button>`}).join("");
+}
+function perfil(n,l){
+  const t=hoy(),w=wk(),m=t.slice(0,7),S=f=>fmt(sum(l.filter(a=>f(fv(a))),a=>a.total));
+  const pen=l.filter(a=>!cont(a)&&saldo(a)>0).sort((x,y)=>prox(x)<prox(y)?-1:1),meses={};
+  l.forEach(a=>{const k=fv(a).slice(0,7);meses[k]=(meses[k]||0)+a.total});
+  return `<button class="ghost" id="vback">← Vendedores</button><h2 style="margin:12px 0">${esc(n)}</h2>
+  <div class="kp">${kpi("Hoy",S(d=>d===t))}${kpi("Esta semana",S(d=>d>=w))}${kpi("Este mes",S(d=>d.slice(0,7)===m))}${kpi("Total vendido",fmt(sum(l,a=>a.total)))}${kpi("Le deben",fmt(sum(l,saldo)))}</div>
+  <div class="card"><h2>Cobros pendientes</h2>${tbl([["Factura"],["Cliente"],["Saldo",1],["Próxima visita"],["Cobrador"]],pen.map(a=>`<tr>${td(esc(a.inv))}${td(esc(a.n))}${td(fmt(saldo(a)),1)}${td(fd(prox(a))+(prox(a)<hoy()?' <span class="badge w">Atrasada</span>':""))}${td(esc(a.cob))}</tr>`))}</div>
+  <div class="card"><h2>Por mes</h2>${tbl([["Mes"],["Vendido",1]],Object.keys(meses).sort().reverse().map(k=>`<tr>${td(k?new Date(k+"-15T12:00:00").toLocaleDateString("es-CO",{month:"long",year:"numeric"}):"Sin fecha")}${td(fmt(meses[k]),1)}</tr>`))}</div>
+  <div class="card"><h2>Detalle de ventas</h2>${tbl([["Factura"],["Fecha"],["Cliente"],["Teléfono"],["Dirección"],["Producto"],["Tipo"],["Total",1],["Pagado",1],["Saldo",1],["Próx. visita"],["Cobrador"],["Acción"]],l.slice().reverse().map(a=>`<tr>${td(esc(a.inv))}${td(fd(fv(a)))}${td(esc(a.n))}${td(esc(a.tel))}${td(a.dir?esc(a.dir)+", "+esc(a.c):"—")}${td(esc(a.prod))}${td(tipoB(a))}${td(fmt(a.total),1)}${td(fmt(a.total-saldo(a)),1)}${td(fmt(saldo(a)),1)}${td(!cont(a)&&saldo(a)?fd(prox(a)):"—")}${td(esc(a.cob||"—"))}${td(delB(a))}</tr>`))}</div>`;
+}
+function vInv(){
+  const nv=n=>sum(C,a=>(a.items||[a.prod]).filter(x=>x===n).length);
+  return `<div class="card"><h2>Agregar producto</h2><div class="fr"><div><label for="pN">Nombre</label><input id="pN"></div><div><label for="pS">Cantidad</label><input id="pS" type="number" inputmode="numeric" min="0"></div><button class="ghost" id="pAdd">Agregar</button></div></div>
+  <div class="kp">${kpi("Productos",INVT.length)}${kpi("Unidades en stock",sum(INVT,p=>p.stock))}</div>
+  <div class="card"><h2>Inventario</h2>${tbl([["Producto"],["En stock",1],["Vendidas",1],["Precio contado",1],["Precio crédito",1],["Acción"]],INVT.map(p=>`<tr>${td(esc(p.nombre))}${td(p.stock>0?p.stock:'<span class="badge w">Agotado</span>',1)}${td(nv(p.nombre),1)}${td(p.pc?fmt(p.pc):"—",1)}${td(p.pr?fmt(p.pr):"—",1)}${td(`<button class="ghost" data-pe="${esc(p.id)}">Stock</button> <button class="ghost" data-pp="${esc(p.id)}">Precios</button>`)}</tr>`))}</div>`;
+}
+const VENDS=["Andrés Gómez"];
+function vSalida(){
+  const vs=[...new Set([...VL,...C.map(a=>a.vend).filter(Boolean),...AS.map(x=>x.vend)])];
+  if(!vs.includes(sV))sV=vs[0];
+  if(!INVT.some(p=>p.nombre===sP))sP=(INVT[0]||{}).nombre||"";
+  const g=by(AS,"vend");
+  const acc=x=>`<button class="ghost" data-sa="e" data-sv="${esc(x.vend)}" data-sp="${esc(x.prod)}">Editar</button> <button class="ghost" data-sa="q" data-sv="${esc(x.vend)}" data-sp="${esc(x.prod)}">Quitar</button>`;
+  return `<div class="card"><div class="hd"><h2>Productos que salen a vender</h2><input type="date" id="ds" value="${dSal}" aria-label="Fecha de salida" style="width:auto"></div>
+  <p class="sub">Al asignar, las unidades salen del inventario; si quitas o reduces, vuelven. Lo que venda el vendedor sale de lo asignado.</p>
+  <div class="fr"><div><label for="sVn">Vendedor</label><select id="sVn">${vs.map(v=>`<option${v===sV?" selected":""}>${esc(v)}</option>`).join("")}</select></div>
+  <div><label for="sPn">Producto</label><select id="sPn">${INVT.map(p=>`<option value="${esc(p.nombre)}"${p.nombre===sP?" selected":""}>${esc(p.nombre)} (${p.stock} en stock)</option>`).join("")}</select></div>
+  <div><label for="sQ">Cantidad a sumar</label><input id="sQ" type="number" inputmode="numeric" min="1" value="1"></div>
+  <button class="ghost" id="sAdd">Asignar</button></div><div class="fr" style="margin-top:10px"><div><label for="nvN">Agregar vendedor/a</label><input id="nvN"></div><button class="ghost" id="nvB">Agregar</button></div></div>`+
+  (AS.length?Object.keys(g).map(n=>{const l=g[n];return `<div class="card"><div class="hd"><h2>${esc(n)} · ${fd(dSal)}${l[0].cerrado?' <span class="badge">Día cerrado</span>':""}</h2>${l[0].cerrado?"":`<button class="ghost" data-cz="${esc(n)}">Cerrar día</button>`}</div><div class="kp">${kpi("Unidades que lleva",sum(l,x=>x.cant))}${kpi("Vendidas",sum(l,x=>x.vendidas))}${kpi("Le quedan",sum(l,x=>Math.max(x.cant-x.vendidas,0)))}</div>
+  ${tbl([["Producto"],["Lleva",1],["Vendidas",1],["Le quedan",1],["Acción"]],l.map(x=>`<tr>${td(esc(x.prod))}${td(x.cant,1)}${td(x.vendidas,1)}${td(Math.max(x.cant-x.vendidas,0),1)}${td(acc(x))}</tr>`))}</div>`}).join(""):`<div class="card"><div class="sub" style="margin:0">Aún no hay productos asignados para esta fecha. Elige vendedor, producto y cantidad.</div></div>`)+faltCard();
+}
+function faltCard(){return `<div class="card"><h2>Faltantes por devolver · días cerrados</h2>${tbl([["Fecha"],["Vendedor"],["Producto"],["Le falta",1],["Estado"],["Acción"]],FA.slice().reverse().map(x=>`<tr>${td(fd(x.fecha))}${td(esc(x.vend))}${td(esc(x.prod))}${td(x.cant,1)}${td(x.estado==="pendiente"?'<span class="badge w">Pendiente</span>':'<span class="badge">Recibido</span>')}${td(x.estado==="pendiente"?`<button class="ghost" data-fr="${esc(x.id)}">Recibido · volver al inventario</button>`:"—")}</tr>`))}</div>`}
+const escala=v=>v>=5700000?23:v>=3700000?22:v>=3100000?21:v>=2600000?19:v>=2000000?17:0;
+function semData(){const days=[0,1,2,3,4,5,6].map(i=>{const d=new Date(sem+"T12:00:00");d.setDate(d.getDate()+i);return d.toISOString().slice(0,10)});return COBS.map(c=>{const l=C.filter(a=>a.cob===c&&!cont(a));let ac=0;const r=days.map(f=>{let e=0,n=0;l.forEach(a=>a.h.forEach(x=>{if(!x.ini&&x.f===f){if(x.metodo==="nequi")n+=x.m;else e+=x.m}}));ac+=e+n;return{f,e,n,ac}}),ef=sum(r,x=>x.e),nq=sum(r,x=>x.n),rec=ef+nq,prog=rec+sum(l.filter(a=>saldo(a)>0&&prox(a)<=days[6]),a=>Math.min(a.cuota,saldo(a))),p=escala(rec);return{c,l,r,ef,nq,rec,prog,falta:Math.max(prog-rec,0),cum:prog?Math.round(rec/prog*100):0,p,car:sum(l,a=>a.total),pen:sum(l,saldo),gan:Math.round(rec*p/100)}})}
+function vSemanal(){
+  const D=semData();
+  return `<div class="card"><div class="hd"><h2></p><div class="fr"><button class="ghost" id="prt">Imprimir</button><button class="ghost" id="csv">Descargar para Excel</button></div></div>
+  <div class="kp">${kpi("Recaudado en la semana",fmt(sum(D,x=>x.rec)))}${kpi("Falta por cobrar (semana)",fmt(sum(D,x=>x.falta)))}${kpi("Saldo de cartera",fmt(sum(D,x=>x.pen)))}${kpi("Pago a cobradores",fmt(sum(D,x=>x.gan)))}</div>
+  <div class="card"><h2>Resumen por cobrador</h2>${tbl([["Cobrador"],["Cuentas",1],["Efectivo",1],["Nequi",1],["Recaudado",1],["Falta semana",1],["Cumplimiento",1],["% a pagar",1],["Ganancia",1],["Neto a entregar",1],["Saldo cartera",1]],D.map(x=>`<tr>${td(esc(x.c))}${td(x.l.length,1)}${td(fmt(x.ef),1)}${td(fmt(x.nq),1)}${td(fmt(x.rec),1)}${td(fmt(x.falta),1)}${td(x.cum+" %",1)}${td(x.p+" %",1)}${td(fmt(x.gan),1)}${td(fmt(x.rec-x.gan),1)}${td(fmt(x.pen),1)}</tr>`))}</div>`+D.filter(x=>x.rec||x.l.length).map(x=>`<div class="card"><h2>${esc(x.c)} · acumulado por fecha</h2>${tbl([["Fecha"],["Efectivo",1],["Nequi",1],["Total del día",1],["Acumulado",1]],x.r.map(y=>`<tr>${td(fd(y.f))}${td(fmt(y.e),1)}${td(fmt(y.n),1)}${td(fmt(y.e+y.n),1)}${td(fmt(y.ac),1)}</tr>`))}</div>`).join("");
+}
+function csvSem(){const D=semData(),r=[["Cobrador","Cuentas","Efectivo","Nequi","Recaudado","Falta semana","Cumplimiento %","% a pagar","Ganancia","Neto a entregar","Saldo cartera"]];D.forEach(x=>r.push([x.c,x.l.length,x.ef,x.nq,x.rec,x.falta,x.cum,x.p,x.gan,x.rec-x.gan,x.pen]));r.push([]);r.push(["Cobrador","Fecha","Efectivo","Nequi","Total","Acumulado"]);D.forEach(x=>x.r.forEach(y=>r.push([x.c,y.f,y.e,y.n,y.e+y.n,y.ac])));const t="\ufeff"+r.map(l=>l.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="cobro_semanal_"+sem+".csv";a.click()}
+function vZonas(){
+  const cobs=[...new Set([...COBS,...C.map(a=>a.cob).filter(Boolean),...Object.values(ZN).flat()])],op=s=>`<option value="">— ninguno —</option>`+cobs.map(c=>`<option${c===s?" selected":""}>${esc(c)}</option>`).join("");
+  return `<div class="card"><h2>Zonas de cobro · hasta 2 cobradores por zona</h2>${Object.keys(ZN).map(z=>`<div class="fr" style="margin-bottom:10px"><div><label>${esc(z)} · cobrador 1</label><select data-z="${esc(z)}">${op(ZN[z][0])}</select></div><div><label>Cobrador 2</label><select data-z="${esc(z)}">${op(ZN[z][1])}</select></div><button class="ghost" data-zs="${esc(z)}">Guardar</button></div>`).join("")}<div class="fr"><div><label for="zN">Nueva zona</label><input id="zN"></div><button class="ghost" id="zA">Crear zona</button></div></div>
+  <div class="card"><div class="hd"><h2>Jornada de cobro · semana del ${fd(sem)}</h2><input type="date" id="sw" value="${sem}" aria-label="Semana" style="width:auto"></div><p class="sub" style="margin-top:0">Bloquea o habilita que cada cobrador inicie o finalice su día de cobro.</p>${tbl([["Cobrador"],["Zona"],["Inicio del día"],["Finalización del día"]],cobs.map(c=>{const b=BQ[c]||{},z=Object.keys(ZN).find(k=>ZN[k].includes(c))||"—";return `<tr>${td(esc(c))}${td(esc(z))}${td(`<button class="ghost" data-bq="${esc(c)}" data-w="bi">${b.bi?"Bloqueado · habilitar":"Habilitado · bloquear"}</button>`)}${td(`<button class="ghost" data-bq="${esc(c)}" data-w="bf">${b.bf?"Bloqueado · habilitar":"Habilitado · bloquear"}</button>`)}</tr>`}))}</div>`+`<div class="card"><h2>Jornadas de cobro · historial</h2>${tbl([["Fecha"],["Cobrador"],["Inicio"],["Fin"],["Estado"],["Recaudado",1]],JR.slice().sort((x,y)=>y.fecha<x.fecha?-1:1).map(j=>`<tr>${td(fd(j.fecha))}${td(esc(j.cob))}${td(j.ini?hh(j.ini):"—")}${td(j.fin?hh(j.fin):"—")}${td(j.fin?'<span class="badge">Finalizada</span>':j.ini?'<span class="badge w">En curso</span>':"No iniciada")}${td(fmt(sum(C.filter(a=>a.cob===j.cob),a=>sum(a.h.filter(r=>!r.ini&&r.f===j.fecha),r=>r.m))),1)}</tr>`))}</div>`;
+}
+function vCob(){
+  const cr=C.filter(a=>!cont(a));
+  if(!cr.length)return `<div class="card"><div class="sub" style="margin:0">Aún no hay cuentas a crédito asignadas a cobradores.</div></div>`;
+  const g=by(cr,"cob");
+  return Object.keys(g).map(n=>{const l=g[n];
+    const rows=[];l.forEach(a=>a.h.filter(r=>!r.ini).forEach(r=>rows.push({a,r})));rows.sort((x,y)=>y.r.f<x.r.f?-1:1);
+    return `<div class="card"><h2>${esc(n)}</h2><div class="kp">${kpi("Cuentas",l.length)}${kpi("Recaudado",fmt(sum(l,cobrado)))}${kpi("Saldo por cobrar",fmt(sum(l,saldo)))}</div>
+    ${tbl([["Fecha y hora"],["Factura"],["Cliente"],["Abono",1],["Saldo",1],["Vuelve"]],rows.map(({a,r})=>`<tr>${td(fd(r.f)+(r.t?" · "+hh(r.t):""))}${td(esc(a.inv))}${td(esc(a.n))}${td(fmt(r.m),1)}${td(fmt(r.s),1)}${td(r.s?fd(r.p):"Saldada")}</tr>`))}</div>`}).join("");
+}
+function vNequi(){
+  const B={pendiente:'<span class="badge w">Pendiente</span>',verificado:'<span class="badge">Verificado</span>',rechazado:'<span class="badge w">Rechazado</span>'};
+  return `<div class="kp">${kpi("Pagos por Nequi",N.length)}${kpi("Total recibido",fmt(sum(N,x=>x.monto)))}${kpi("Pendientes de verificar",N.filter(x=>x.estado==="pendiente").length)}</div>
+  <div class="card"><h2>Pagos por Nequi</h2>${tbl([["Fecha"],["N.º comprobante"],["Factura"],["Cliente"],["Producto"],["Cobrador"],["Abono",1],["Saldo hoy",1],["Estado"],["Foto"],["Acción"]],N.slice().reverse().map(x=>{const a=C.find(c=>c.inv===x.inv)||{h:[]};return `<tr>${td(fd(x.f))}${td(esc(x.num))}${td(esc(x.inv))}${td(esc(x.cliente))}${td(esc(a.prod||"—"))}${td(esc(x.cobrador))}${td(fmt(x.monto),1)}${td(a.h.length?fmt(saldo(a)):"—",1)}${td(B[x.estado]||x.estado)}${td(`<a href="/api/foto?num=${encodeURIComponent(x.num)}" target="_blank" rel="noopener">Ver</a>`)}${td(`<button class="ghost" data-n="${esc(x.num)}" data-e="verificado">Verificar</button> <button class="ghost" data-n="${esc(x.num)}" data-e="rechazado">Rechazar</button>`)}</tr>`}))}</div>`;
+}
+const COBS=["ALEXANDER","ANDRES","CESAR","DIEGO","ELKIN","GERMAN","JOSE LUIS","JOSE YAIR","JUAN"];
+const post=(u,b)=>fetch(u,{method:"POST",headers:H,body:JSON.stringify(b)}).then(async r=>{if(!r.ok)alert((await r.json().catch(()=>({}))).error||"No se pudo guardar");return r});
+let dCaja=hoy();
+let mvf="",mt="",TF="",rd0="",rd1="",dq="",cq="",cm="",MF="";
+function reducir(file,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.7))};im.src=r.result};r.readAsDataURL(file)}
+function vMora(){
+  const t=hoy(),vs=[...new Set(C.map(a=>a.vend||"Andrés Gómez"))],l=C.filter(a=>!cont(a)&&saldo(a)>0&&(!mvf||(a.vend||"Andrés Gómez")===mvf)).map(a=>{const p=prox(a);return{a,d:p&&p<t?Math.round((new Date(t+"T12:00:00")-new Date(p+"T12:00:00"))/864e5):0}}).filter(x=>x.d>0).sort((x,y)=>y.d-x.d),e=C.find(a=>a.inv===mt);
+  const form=e?`<div class="card"><h2>Transferencia recibida en la oficina · ${esc(e.inv)} · ${esc(e.n)}</h2><div class="fr"><div><label for="tV">Valor transferido (saldo ${fmt(saldo(e))})</label><input id="tV" type="number" value="${Math.min(e.cuota,saldo(e))}"></div><div><label for="tN">N.º de comprobante</label><input id="tN" autocomplete="off"></div><div><label for="tF">Foto del comprobante</label><input id="tF" type="file" accept="image/*" capture="environment"></div></div><div style="margin-top:10px"><button class="ghost" id="tOk">Registrar transferencia</button> <button class="ghost" id="tNo">Cancelar</button></div></div>`:"";
+  return form+`<div class="kp">${kpi("Cuentas en mora",l.length)}${kpi("Saldo en mora",fmt(sum(l,x=>saldo(x.a))))}</div>
+  <div class="card"><div class="hd"><h2>Cartera en mora · más atrasadas primero</h2><select id="mvf" aria-label="Filtrar por vendedor"><option value="">Todos los vendedores</option>${vs.map(v=>`<option${v===mvf?" selected":""}>${esc(v)}</option>`).join("")}</select></div>${tbl([["Mora",1],["Fecha de venta"],["Cliente"],["Teléfono"],["Vendedor"],["Cobrador"],["Factura"],["Saldo",1],["Motivo del retraso"],["Acción"]],l.map(x=>{const a=x.a;let d=String(a.tel||"").replace(/\D/g,"");if(d.length===10)d="57"+d;const msg="Hola "+a.n+", le recordamos que tiene un saldo pendiente de "+fmt(saldo(a))+" por "+a.prod+" ("+a.inv+"). ¿Cuándo podemos pasar por su pago? Gracias.";return `<tr>${td(`<span class="badge w">${x.d} días</span>`,1)}${td(fd(fv(a)))}${td(esc(a.n))}${td(esc(a.tel))}${td(esc(a.vend||"Andrés Gómez"))}${td(esc(a.cob))}${td(esc(a.inv))}${td(fmt(saldo(a)),1)}${td(`<input class="mi" style="width:150px" data-mo="${esc(a.inv)}" value="${esc(a.motivo)}" aria-label="Motivo del retraso">`)}${td(`<button class="ghost" data-mt="${esc(a.inv)}">Transferencia</button> `+(d?`<a href="https://wa.me/${d}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a>`:""))}</tr>`}))}</div>`;
+}
+function vPrest(){
+  const sp=p=>p.monto-sum(p.abonos,x=>x.m),act=PR.filter(p=>sp(p)>0),ab=[];
+  PR.forEach(p=>{let s=p.monto;p.abonos.forEach(x=>{s-=x.m;ab.push({p,x,s})})});
+  return `<div class="card"><h2>Préstamos a cobradores</h2><p class="sub">Servicio independiente: no se mezcla con los cobros de clientes, la caja ni el recaudo semanal.</p><div class="fr"><div><label for="lC">Cobrador</label><select id="lC">${COBS.map(c=>`<option>${esc(c)}</option>`).join("")}</select></div><div><label for="lM">Monto</label><input id="lM" type="number" inputmode="numeric"></div><div><label for="lF">Fecha</label><input id="lF" type="date" value="${hoy()}"></div><button class="ghost" id="lAdd">Registrar préstamo</button></div></div>
+  <div class="kp">${kpi("Préstamos activos",act.length)}${kpi("Saldo pendiente",fmt(sum(act,sp)))}${kpi("Pagados",PR.length-act.length)}</div>
+  <div class="card"><h2>Préstamos</h2>${tbl([["Fecha"],["Cobrador"],["Monto",1],["Abonado",1],["Saldo",1],["Estado"],["Acción"]],PR.slice().reverse().map(p=>`<tr>${td(fd(p.fecha))}${td(esc(p.cob))}${td(fmt(p.monto),1)}${td(fmt(p.monto-sp(p)),1)}${td(fmt(sp(p)),1)}${td(sp(p)>0?'<span class="badge w">Activo</span>':'<span class="badge">Pagado</span>')}${td(sp(p)>0?`<button class="ghost" data-la="${esc(p.id)}">Registrar abono</button>`:"—")}</tr>`))}</div>
+  <div class="card"><h2>Historial de abonos</h2>${tbl([["Fecha"],["Cobrador"],["Préstamo"],["Abono",1],["Saldo restante",1]],ab.reverse().map(({p,x,s})=>`<tr>${td(fd(x.f)+" · "+hh(x.t))}${td(esc(p.cob))}${td(esc(p.id)+" · "+fd(p.fecha))}${td(fmt(x.m),1)}${td(fmt(s),1)}</tr>`))}</div>`;
+}
+function vRend(){
+  const l=C.filter(a=>(!rd0||fv(a)>=rd0)&&(!rd1||fv(a)<=rd1)),V={},P={},D={};
+  INVT.forEach(p=>P[p.nombre]=0);
+  l.forEach(a=>{const v=a.vend||"Andrés Gómez",d=fv(a)||"Sin fecha";V[v]=V[v]||{n:0,u:0,t:0};D[d]=D[d]||{n:0,u:0,t:0};V[v].n++;D[d].n++;V[v].t+=a.total;D[d].t+=a.total;(a.items||[a.prod]).forEach(p=>{V[v].u++;D[d].u++;P[p]=(P[p]||0)+1})});
+  const vs=Object.keys(V).sort((a,b)=>V[b].u-V[a].u),ps=Object.keys(P).sort((a,b)=>P[b]-P[a]),mv=Math.max(1,...vs.map(k=>V[k].u)),mp=Math.max(1,...ps.map(k=>P[k])),df=v=>sum(FA.filter(x=>x.vend===v&&x.estado==="pendiente"),x=>x.cant);
+  const bar=(n,m)=>`<div style="background:var(--acbg);border-radius:6px;height:14px;min-width:90px"><div style="background:var(--ac);height:14px;border-radius:6px;width:${Math.round(n/m*100)}%"></div></div>`;
+  return `<div class="card"><div class="hd"><h2>Rendimiento de vendedores</h2><span><input type="date" id="rd0" value="${rd0}" style="width:auto" aria-label="Desde"> <input type="date" id="rd1" value="${rd1}" style="width:auto" aria-label="Hasta"></span></div><p class="sub" style="margin:0">Déficit = unidades que el vendedor aún debe devolver tras cerrar el día.</p></div>
+  <div class="kp">${kpi("Ventas",l.length)}${kpi("Unidades vendidas",sum(vs,k=>V[k].u))}${kpi("Más vendedor/a",vs[0]||"—")}${kpi("Producto estrella",ps[0]&&P[ps[0]]?ps[0]:"—")}</div>
+  <div class="card"><h2>Comparación entre vendedores</h2>${tbl([["Vendedor"],["Ventas",1],["Unidades",1],["Total vendido",1],["Déficit",1],["Gráfico"]],vs.map(k=>`<tr>${td(esc(k))}${td(V[k].n,1)}${td(V[k].u,1)}${td(fmt(V[k].t),1)}${td(df(k)?`<span class="badge w">${df(k)} un.</span>`:"0",1)}${td(bar(V[k].u,mv))}</tr>`))}</div>
+  <div class="card"><h2>Unidades por producto · de mayor a menor volumen</h2>${tbl([["Producto"],["Unidades",1],["Gráfico"]],ps.map(k=>`<tr>${td(esc(k))}${td(P[k],1)}${td(bar(P[k],mp))}</tr>`))}</div>
+  <div class="card"><h2>Resultados por fecha</h2>${tbl([["Fecha"],["Ventas",1],["Unidades",1],["Total",1]],Object.keys(D).sort().reverse().map(k=>`<tr>${td(k==="Sin fecha"?k:fd(k))}${td(D[k].n,1)}${td(D[k].u,1)}${td(fmt(D[k].t),1)}</tr>`))}</div>`;
+}
+function vDev(){
+  const l=dq?C.filter(a=>(a.inv+" "+a.n+" "+a.prod).toLowerCase().includes(dq.toLowerCase())).slice(0,30):[];
+  return `<div class="card"><h2>Devoluciones</h2><p class="sub">Busca la factura y dala de baja: los productos vuelven al inventario y se descuentan de los totales.</p><div class="fr"><div><label for="dqI">Factura, cliente o producto</label><input id="dqI" value="${esc(dq)}" placeholder="Ej. FAC-000012"></div></div></div>`+(dq?`<div class="card">${tbl([["Factura"],["Fecha"],["Cliente"],["Producto"],["Total",1],["Acción"]],l.map(a=>`<tr>${td(esc(a.inv))}${td(fd(fv(a)))}${td(esc(a.n))}${td(esc(a.prod))}${td(fmt(a.total),1)}${td(`<button class="ghost" data-del="${esc(a.inv)}">Dar de baja</button>`)}</tr>`))}</div>`:"");
+}
+function vCli(){
+  const l=cq?C.filter(a=>(a.inv+" "+a.n+" "+a.tel).toLowerCase().includes(cq.toLowerCase())).slice(0,30):[],e=C.find(a=>a.inv===cm);
+  const form=e?`<div class="card"><h2>Mudanza · ${esc(e.n)} (${esc(e.inv)})</h2><div class="fr"><div><label for="mD">Nueva dirección</label><input id="mD" value="${esc(e.dir)}"></div><div><label for="mC">Ciudad</label><input id="mC" value="${esc(e.c)}"></div><div><label for="mO">Descripción de la casa</label><input id="mO" value="${esc(e.obs)}"></div><div><label for="mN">Nota de la mudanza</label><input id="mN"></div><div><label for="mF">Foto de referencia (opcional)</label><input id="mF" type="file" accept="image/*" capture="environment"></div></div><div style="margin-top:10px"><button class="ghost" id="mOk">Guardar cambios</button> <button class="ghost" id="mNo">Cancelar</button></div></div>`:"";
+  return form+`<div class="card"><h2>Mudanzas y datos del cliente</h2><div class="fr"><div><label for="cqI">Buscar cliente, teléfono o factura</label><input id="cqI" value="${esc(cq)}"></div></div></div>`+(cq?`<div class="card">${tbl([["Factura"],["Cliente"],["Teléfono"],["Dirección"],["Mudanzas",1],["Acción"]],l.map(a=>`<tr>${td(esc(a.inv))}${td(esc(a.n))}${td(esc(a.tel))}${td(esc(a.dir)+", "+esc(a.c))}${td((a.mud||[]).length,1)}${td(`<button class="ghost" data-cm="${esc(a.inv)}">Editar</button>`)}</tr>`))}</div>`:"");
+}
+function vCaja(){
+  const rows={};COBS.forEach(c=>rows[c]=[0,0,0]);
+  C.forEach(a=>a.h.filter(r=>!r.ini&&r.f===dCaja).forEach(r=>{const c=a.cob||"Sin asignar";rows[c]=rows[c]||[0,0,0];rows[c][r.metodo==="nequi"?1:0]+=r.m;rows[c][2]++}));
+  const ks=Object.keys(rows),ef=sum(ks,k=>rows[k][0]),nq=sum(ks,k=>rows[k][1]),cd=sum(C.filter(a=>cont(a)&&fv(a)===dCaja),a=>a.total);
+  return `<div class="card"><div class="hd"><h2>Caja del día por cobrador</h2><input type="date" id="dc" value="${dCaja}" aria-label="Fecha de caja"></div>
+  <div class="kp">${kpi("Efectivo a entregar",fmt(ef))}${kpi("Nequi",fmt(nq))}${kpi("Total cobrado",fmt(ef+nq))}${kpi("Ventas de contado",fmt(cd))}</div>
+  ${tbl([["Cobrador"],["Cobros",1],["Efectivo a entregar",1],["Nequi",1],["Total",1]],ks.map(k=>`<tr>${td(esc(k))}${td(rows[k][2],1)}${td(fmt(rows[k][0]),1)}${td(fmt(rows[k][1]),1)}${td(fmt(rows[k][0]+rows[k][1]),1)}</tr>`))}</div>`;
+}
+function render(){
+  $("tabs").innerHTML=[["Resumen",["main"]],["Ventas",["ventas","vend","rend","dev","cli"]],["Cobros",["cob","semanal","nequi","caja","mora","zonas","prest"]],["Inventario",["inv","salida"]]].map(([g,ks])=>`<div class="gt">${g}</div>`+ks.map(k=>`<button class="chip" data-k="${k}" aria-pressed="${k===tab}">${TABS.find(t=>t[0]===k)[1]}</button>`).join("")).join("");$("ttl").textContent=(TABS.find(t=>t[0]===tab)||[])[1]||"";
+  $("v").innerHTML={main:vMain,ventas:vVentas,vend:vVend,cob:vCob,nequi:vNequi,inv:vInv,salida:vSalida,semanal:vSemanal,zonas:vZonas,prest:vPrest,rend:vRend,dev:vDev,cli:vCli,mora:vMora,caja:vCaja}[tab]();
+  document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.k;vsel="";document.body.classList.remove("open");render();scrollTo(0,0)});
+  document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{vsel=b.dataset.v;render()});
+  const vb=$("vback");if(vb)vb.onclick=()=>{vsel="";render()};
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(confirm("¿Eliminar la venta "+b.dataset.del+"? El producto vuelve al inventario y se descuenta de los totales."))await fetch("/api/ventas/eliminar",{method:"POST",headers:H,body:JSON.stringify({inv:b.dataset.del})})});
+  const pa=$("pAdd");if(pa)pa.onclick=async()=>{const r=await fetch("/api/productos",{method:"POST",headers:H,body:JSON.stringify({nombre:$("pN").value,stock:$("pS").value})});if(!r.ok)alert((await r.json()).error)};
+  document.querySelectorAll("[data-pe]").forEach(b=>b.onclick=async()=>{const p=INVT.find(x=>x.id===b.dataset.pe),q=prompt("Unidades en stock",p.stock);if(q===null)return;await fetch("/api/productos/editar",{method:"POST",headers:H,body:JSON.stringify({id:p.id,stock:q})})});
+  document.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>fetch("/api/comprobantes/estado",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({num:b.dataset.n,estado:b.dataset.e})}));
+  document.querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>{ed=b.dataset.ed;tab="ventas";vsel="";render()});
+  const g=(id,ev,fn)=>{const x=$(id);if(x)x[ev]=fn};
+  g("eNo","onclick",()=>{ed=null;render()});
+  g("eOk","onclick",()=>{const inv=ed,body={inv,prod:$("eP")?$("eP").value:"",total:+$("eT").value,cuota:$("eQ")?+$("eQ").value:0,cob:$("eC")?$("eC").value:""};ed=null;post("/api/ventas/editar",body)});
+  g("ds","onchange",()=>{dSal=$("ds").value||hoy();load()});
+  g("sVn","onchange",()=>sV=$("sVn").value);g("sPn","onchange",()=>sP=$("sPn").value);
+  g("sAdd","onclick",()=>{const q=Math.floor(+$("sQ").value),x=AS.find(z=>z.vend===sV&&z.prod===sP);if(!(q>0))return alert("Escribe una cantidad mayor a 0.");post("/api/asignaciones",{fecha:dSal,vend:sV,prod:sP,cant:(x?x.cant:0)+q})});
+  document.querySelectorAll("[data-sa]").forEach(b=>b.onclick=()=>{const x=AS.find(z=>z.vend===b.dataset.sv&&z.prod===b.dataset.sp);if(!x)return;let c=x.vendidas;if(b.dataset.sa==="e"){const q=prompt("Unidades que lleva "+x.vend+" de "+x.prod,x.cant);if(q===null)return;c=Math.max(0,Math.floor(+q||0))}post("/api/asignaciones",{fecha:dSal,vend:x.vend,prod:x.prod,cant:c})});
+  g("fm","onchange",()=>{fm=$("fm").value;render()});g("fmx","onclick",()=>{fm="";render()});
+  g("nvB","onclick",()=>post("/api/vendedores",{nombre:$("nvN").value}));
+  document.querySelectorAll("[data-cz]").forEach(b=>b.onclick=()=>{if(confirm("¿Cerrar el día de "+b.dataset.cz+"? Lo que no vendió quedará registrado como faltante."))post("/api/cierre",{fecha:dSal,vend:b.dataset.cz})});
+  document.querySelectorAll("[data-fr]").forEach(b=>b.onclick=()=>post("/api/faltantes/recibir",{id:b.dataset.fr}));
+  document.querySelectorAll("[data-zs]").forEach(b=>b.onclick=()=>post("/api/zonas",{zona:b.dataset.zs,cobs:[...document.querySelectorAll('[data-z="'+b.dataset.zs+'"]')].map(s=>s.value)}));
+  g("zA","onclick",()=>post("/api/zonas",{zona:$("zN").value,cobs:[]}));
+  document.querySelectorAll("[data-bq]").forEach(b=>b.onclick=()=>post("/api/bloqueos",{cob:b.dataset.bq,semana:sem,k:b.dataset.w,v:!(BQ[b.dataset.bq]||{})[b.dataset.w]}));
+  g("sw","onchange",()=>{sem=$("sw").value||wk();load()});g("pc","onchange",()=>{pct=+$("pc").value||0;render()});g("prt","onclick",()=>print());g("csv","onclick",csvSem);
+  g("mvf","onchange",()=>{mvf=$("mvf").value;render()});
+  document.querySelectorAll("[data-mt]").forEach(b=>b.onclick=()=>{mt=b.dataset.mt;TF="";render()});
+  g("tNo","onclick",()=>{mt="";render()});g("tF","onchange",e=>{const f=e.target.files[0];TF="";if(f)reducir(f,d=>TF=d)});
+  g("tOk","onclick",async()=>{const r=await post("/api/transferencia",{inv:mt,monto:+$("tV").value,num:$("tN").value,foto:TF,fecha:hoy()});if(r.ok){mt="";TF="";render()}});
+  document.querySelectorAll("[data-mo]").forEach(i=>i.onchange=()=>post("/api/mora/motivo",{inv:i.dataset.mo,motivo:i.value}));
+  g("lAdd","onclick",()=>post("/api/prestamos",{cob:$("lC").value,monto:+$("lM").value,fecha:$("lF").value}));
+  document.querySelectorAll("[data-la]").forEach(b=>b.onclick=()=>{const q=prompt("Valor del abono");if(q!==null)post("/api/prestamos/abono",{id:b.dataset.la,monto:+q,fecha:hoy()})});
+  g("rd0","onchange",()=>{rd0=$("rd0").value;render()});g("rd1","onchange",()=>{rd1=$("rd1").value;render()});
+  g("dqI","onchange",()=>{dq=$("dqI").value.trim();render()});g("cqI","onchange",()=>{cq=$("cqI").value.trim();render()});
+  document.querySelectorAll("[data-cm]").forEach(b=>b.onclick=()=>{cm=b.dataset.cm;MF="";render()});
+  g("mF","onchange",e=>{const f=e.target.files[0];MF="";if(f)reducir(f,d=>MF=d)});g("mNo","onclick",()=>{cm="";render()});
+  g("mOk","onclick",async()=>{const r=await post("/api/clientes/mudanza",{inv:cm,dir:$("mD").value,c:$("mC").value,obs:$("mO").value,nota:$("mN").value,foto:MF});if(r.ok){cm="";MF="";render()}});
+  document.querySelectorAll("[data-pp]").forEach(b=>b.onclick=()=>{const p=INVT.find(x=>x.id===b.dataset.pp),c=prompt("Precio de CONTADO de "+p.nombre,p.pc||0);if(c===null)return;const r=prompt("Precio a CRÉDITO de "+p.nombre,p.pr||0);if(r===null)return;post("/api/productos/editar",{id:p.id,stock:p.stock,pc:+c,pr:+r})});
+  g("dc","onchange",()=>{dCaja=$("dc").value||hoy();render()});
+  const f=$("flt");if(f){f.value=flt;f.onchange=()=>{flt=f.value;render()}}
+}
+async function load(){
+  dSal=dSal||hoy();sem=sem||wk();
+  try{[ALL,M,N,INVT,AS,VL,FA,ZN,BQ,PR,JR]=await Promise.all([fetch("/api/cuentas?adm=1").then(r=>r.json()),fetch("/api/movimientos").then(r=>r.json()),fetch("/api/comprobantes").then(r=>r.json()),fetch("/api/productos").then(r=>r.json()),fetch("/api/asignaciones?fecha="+dSal).then(r=>r.json()),fetch("/api/vendedores").then(r=>r.json()),fetch("/api/faltantes").then(r=>r.json()),fetch("/api/zonas").then(r=>r.json()),fetch("/api/bloqueos?semana="+sem).then(r=>r.json()),fetch("/api/prestamos").then(r=>r.json()),fetch("/api/jornadas").then(r=>r.json())]);C=ALL.filter(a=>!a.anulada);EL=ALL.filter(a=>a.anulada)}
+  catch(e){$("sub").textContent="Sin conexión con el servidor. Revisa que esté encendido.";return}
+  $("sub").textContent="En vivo · actualizado a las "+new Date().toLocaleTimeString("es-CO",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  if(document.activeElement&&document.activeElement.tagName==="INPUT")return;
+  render();
+}
+$("mn").onclick=()=>document.body.classList.toggle("open");
+$("rst").onclick=async()=>{if(confirm("¿Borrar todas las ventas y cobros de la demo?"))await fetch("/api/reset",{method:"POST"})};
+load();new EventSource("/api/eventos").onmessage=load;
+</script></body></html>
